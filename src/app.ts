@@ -67,4 +67,40 @@ courseRouter.post("/create-course", (req: Request, res: Response) => {
 })
 
 
+// ! Error handling in Express
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
+    try {
+        console.log(something);
+        // res.send(false)
+    } catch (error) {
+        console.log(error);
+        next(error)
+        // res.status(400).json({
+        //     success: false,
+        //     message: 'failed to get data'
+        // })
+    }
+})
+
+
+// ! Global Error Handler
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+    if(error) {
+        res.status(400).json({
+            success: false,
+            message: 'Something went wrong'
+        })
+    }
+})
+
+
+// ! Incorrect route error handling
+app.all("*", (req: Request, res: Response) => {
+    res.status(400).json({
+        success: false,
+        message: 'Route is not found'
+    })
+})
+
+
 export default app;

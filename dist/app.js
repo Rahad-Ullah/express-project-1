@@ -56,4 +56,35 @@ courseRouter.post("/create-course", (req, res) => {
         data: course
     });
 });
+// ! Error handling in Express
+app.get("/", (req, res, next) => {
+    try {
+        console.log(something);
+        // res.send(false)
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+        // res.status(400).json({
+        //     success: false,
+        //     message: 'failed to get data'
+        // })
+    }
+});
+// ! Global Error Handler
+app.use((error, req, res, next) => {
+    if (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Something went wrong'
+        });
+    }
+});
+// ! Incorrect route error handling
+app.all("*", (req, res) => {
+    res.status(400).json({
+        success: false,
+        message: 'Route is not found'
+    });
+});
 exports.default = app;
